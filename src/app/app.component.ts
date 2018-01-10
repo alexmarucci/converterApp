@@ -18,23 +18,32 @@ export class AppComponent implements OnInit {
   newVideoUrl: String;
 
   constructor(private http: HttpClient, private videoService: VideoService) {
-    this.videos = [];
+      let dummyVideo = new Video('url://');
+      dummyVideo.title = 'PEACH PIT - peach pit';
+      dummyVideo.thumbnail = {url: 'https://i.ytimg.com/vi/PRXtbLqIx04/mqdefault.jpg', width: 30, height: 40};
+      dummyVideo.duration = '330';
+    this.videos = [dummyVideo];
+    this.videos.push(dummyVideo);
     this.newVideoUrl = 'https://www.youtube.com/watch?v=PRXtbLqIx04';
   }
  
   ngOnInit(): void {
-    // Make the HTTP request:
-    this.http.get('https://jsonplaceholder.typicode.com/photos').subscribe(data => {
-      // Read the result field from the JSON response.
-      //this.videos = data;
-    });
   }
 
   addVideo(){
+      if (this.newVideoUrl.trim().length == 0) {
+          return true;
+      }
     let newVideo = new Video(this.newVideoUrl);
-
-    this.videoService.getVideo( newVideo ).subscribe(video => this.videos.push( video ))
+    this.videos.push( newVideo );
+    if ( newVideo.valid == true) {
+      this.videoService.getVideo( newVideo ).subscribe(video => newVideo = video; )
+    }
 
     this.newVideoUrl = '';
+  }
+
+  onPaste(e: any ): void {
+      alert( e.clipboardData.getData('text/plain') );
   }
 }

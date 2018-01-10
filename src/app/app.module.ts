@@ -6,14 +6,18 @@ import {HttpClientModule} from '@angular/common/http';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatButtonModule} from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatIconModule} from '@angular/material/icon';
 
 import { AppComponent } from './app.component';
 import { VideoService } from './video.service';
+import { TimeFormatPipe } from './time-format.pipe';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TimeFormatPipe
   ],
   imports: [
     BrowserModule,
@@ -22,6 +26,8 @@ import { VideoService } from './video.service';
     MatListModule,
     MatProgressBarModule,
     MatButtonModule,
+    MatChipsModule,
+    MatIconModule,
     FormsModule
   ],
   providers: [VideoService],

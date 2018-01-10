@@ -1,45 +1,42 @@
 
   <header class="toolbar toolbar-header">
-  <h1 class="title">Header with actions</h1>
-  <div class="toolbar-actions pull-left">
-    <label for="videoUrl">
-      <strong>Insert Url</strong>
-      <input type="text" class="form-control" name="videoUrl" [(ngModel)]="newVideoUrl" />
-    </label>
+  <div class="toolbar-actions">
+    <input type="text" style="width:100%" [(ngModel)]='newVideoUrl' placeholder="Paste video URL" />
   </div>
-
   <div class="toolbar-actions pull-right">
-    <button class="btn btn-default" (click)='addVideo()'>
-      <span class="icon icon-pluscd icon-text"></span>
-      Add
+    <button class="btn btn-default">
+      <span class="icon icon-list-add"></span>
+      &nbsp;Paste
+    </button>
+     <button class="btn btn-primary pull-right" (click)='addVideo()'>
+      Download
     </button>
   </div>
 </header>
 
 <mat-list>
   <mat-list-item *ngFor="let vid of videos">
-    <img matListAvatar src="{{vid.thumbnail.url}}" alt="..." width="{{vid.thumbnail.width}}" height="{{vid.thumbnail.height}}" style="border-radius: 0">
-    <h3 matLine> {{ vid.title }} </h3>
-
+    <img matListAvatar src="{{vid.thumbnail.url}}" *ngIf='vid.thumbnail' />
+    <img matListAvatar *ngIf='!vid.thumbnail' />
     <p matLine>
-      <span> description </span>
-      <span class="demo-2"> -- </span>
+      <strong>{{ vid.title }}</strong>&nbsp;<small *ngIf='vid.duration' style='color: #607d8b;'>{{ vid.duration | timeFormat }}</small> 
     </p>
-    <p matLine>
+    <div matLine style="max-width: 50%;min-width: 200px;">
       <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
-    </p>
-      <a mat-mini-fab color="primary" class="icon icon-download pull-right"></a>
+    </div>
+    <span style="pull-right">
+      <mat-icon style='color: #737373;' *ngIf='!vid.done'>file_download</mat-icon>
+      <mat-icon style='color: #737373;' *ngIf='vid.done'>folder</mat-icon>
+    </span>
   </mat-list-item>
 </mat-list>
-
+<!--
 <footer class="toolbar toolbar-footer">
   <div class="toolbar-actions">
-    <button class="btn btn-default">
-      Cancel
-    </button>
 
     <button class="btn btn-primary pull-right">
-      Save
+      Download
     </button>
   </div>
 </footer>
+-->
