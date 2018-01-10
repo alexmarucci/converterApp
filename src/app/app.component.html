@@ -25,7 +25,7 @@
       <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
     </div>
     <span style="pull-right">
-      <mat-icon style='color: #737373;' *ngIf='!vid.done'>file_download</mat-icon>
+      <mat-icon style='color: #737373;' *ngIf='!vid.done' (click)="startConversion( vid )">file_download</mat-icon>
       <mat-icon style='color: #737373;' *ngIf='vid.done'>folder</mat-icon>
     </span>
   </mat-list-item>
