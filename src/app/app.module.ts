@@ -5,8 +5,10 @@ import {MatListModule} from '@angular/material/list';
 import {HttpClientModule} from '@angular/common/http';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatButtonModule} from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { VideoService } from './video.service';
 
 
 @NgModule({
@@ -19,9 +21,10 @@ import { AppComponent } from './app.component';
     BrowserAnimationsModule,
     MatListModule,
     MatProgressBarModule,
-    MatButtonModule
+    MatButtonModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [VideoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

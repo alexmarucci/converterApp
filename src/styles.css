@@ -3,3 +3,11 @@
 
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
+
+
+
+footer {
+	position: fixed;
+    bottom: 0;
+    width: 100%;
+}

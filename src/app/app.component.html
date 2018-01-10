@@ -1,9 +1,26 @@
-<div>
+
+  <header class="toolbar toolbar-header">
+  <h1 class="title">Header with actions</h1>
+  <div class="toolbar-actions pull-left">
+    <label for="videoUrl">
+      <strong>Insert Url</strong>
+      <input type="text" class="form-control" name="videoUrl" [(ngModel)]="newVideoUrl" />
+    </label>
+  </div>
+
+  <div class="toolbar-actions pull-right">
+    <button class="btn btn-default" (click)='addVideo()'>
+      <span class="icon icon-pluscd icon-text"></span>
+      Add
+    </button>
+  </div>
+</header>
 
 <mat-list>
-  <mat-list-item *ngFor="let res of results">
-    <img matListAvatar src="{{res.url}}" alt="...">
-    <h3 matLine> {{res.title}} </h3>
+  <mat-list-item *ngFor="let vid of videos">
+    <img matListAvatar src="{{vid.thumbnail.url}}" alt="..." width="{{vid.thumbnail.width}}" height="{{vid.thumbnail.height}}" style="border-radius: 0">
+    <h3 matLine> {{ vid.title }} </h3>
+
     <p matLine>
       <span> description </span>
       <span class="demo-2"> -- </span>
@@ -15,4 +32,14 @@
   </mat-list-item>
 </mat-list>
 
-</div>
+<footer class="toolbar toolbar-footer">
+  <div class="toolbar-actions">
+    <button class="btn btn-default">
+      Cancel
+    </button>
+
+    <button class="btn btn-primary pull-right">
+      Save
+    </button>
+  </div>
+</footer>
