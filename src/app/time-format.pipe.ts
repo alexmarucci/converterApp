@@ -30,4 +30,3 @@ times = {
     return time_string;
   }
 }
-}

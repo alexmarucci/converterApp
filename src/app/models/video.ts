@@ -4,7 +4,7 @@ export class Video {
 	url: String;
 	title: String;
 	duration: String;
-	thumbnail: String;
+	thumbnail: any;
 	valid: Boolean;
 	done: false;
 
@@ -17,7 +17,7 @@ export class Video {
 
 	private parseIdFromUrl( url ){
 		if (url) {
-			var test = url.match(/watch\?v=(.*)/);
+			var test = url.match(/watch\?v=(.*)\&/);
 			if (test && test.hasOwnProperty(1)) {
 				this.valid = true;
 				return test[1];

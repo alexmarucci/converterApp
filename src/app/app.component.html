@@ -24,10 +24,11 @@
     <div matLine style="max-width: 50%;min-width: 200px;">
       <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
     </div>
-    <span style="pull-right">
+    <div style="display: flex">
       <mat-icon style='color: #737373;' *ngIf='!vid.done' (click)="startConversion( vid )">file_download</mat-icon>
       <mat-icon style='color: #737373;' *ngIf='vid.done'>folder</mat-icon>
-    </span>
+      <mat-icon color='warn' (click)='remove(vid)'>delete</mat-icon>
+    </div>
   </mat-list-item>
 </mat-list>
 <!--

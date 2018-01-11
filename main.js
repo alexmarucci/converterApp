@@ -1,4 +1,5 @@
-const { app, BrowserWindow } = require('electron')
+const { ipcRenderer, ipcMain, app, BrowserWindow, globalShortcut, clipboard } = require('electron')
+
 let win;
 function createWindow () {
   // Create the browser window.
@@ -15,6 +16,12 @@ function createWindow () {
   win.on('closed', function () {
     win = null
   })
+  
+  win.webContents.openDevTools();
+
+ ipcMain.on('asynchronous-message', (event, arg) => {
+    event.sender.send('asynchronous-reply', 'pong')
+  })
 }
 // Create window on electron intialization
 app.on('ready', createWindow)
@@ -24,6 +31,14 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+})
+app.on('browser-window-focus', function () {
+  globalShortcut.register('CommandOrControl+Shift+V', () => {
+      win.webContents.send('asynchronous-reply', clipboard.readText());
+    })
+})
+app.on('browser-window-blur', function () {
+  globalShortcut.unregisterAll()
 })
 app.on('activate', function () {
   // macOS specific close process
