@@ -10,11 +10,5 @@
 </head>
 <body>
   <app-root></app-root>
-  <script>
-        const { ipcRenderer } = require('electron');
-      ipcRenderer.on('asynchronous-reply', (event, arg) => {
-        console.log( 'global says -> ' + arg );
-      })
-  </script>
 </body>
 </html>

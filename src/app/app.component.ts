@@ -1,4 +1,4 @@
-import { OnInit, Component } from '@angular/core';
+import { OnInit, Component, NgZone } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ElectronService} from 'ngx-electron';
 
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   videos: Video[];
   newVideoUrl: String;
 
-  constructor(private http: HttpClient, private videoService: VideoService, private downloadService: DownloadService, private electronService: ElectronService) {
+  constructor(private http: HttpClient, private videoService: VideoService, private downloadService: DownloadService, private electronService: ElectronService, private zone: NgZone) {
       let dummyVideo = new Video('url://');
       dummyVideo.id = 'PRXtbLqIx04';
       dummyVideo.title = 'PEACH PIT - peach pit';
@@ -33,22 +33,20 @@ export class AppComponent implements OnInit {
      if(this.electronService.isElectronApp) {
        console.log( this.electronService );
       this.electronService.ipcRenderer.on('asynchronous-reply', (event, arg) => {
-        console.log('HERE');
-        console.log( arg );
-        this.addVideo( arg );
+        this.zone.run( () =>{ 
+          this.addVideo( new Video(arg) );
+        })
       })
      }
   }
 
-  addVideo(url: String = ''){
-      if (this.newVideoUrl.trim().length == 0 || url.length == 0) {
+  addVideo(newVideo: Video = null){
+      if (this.newVideoUrl.trim().length == 0 || newVideo === null) {
           return true;
       }
-      let newVideo: any;
-     if (url) {
-        let newVideo = new Video( url );
-     } else {
-        let newVideo = new Video(this.newVideoUrl);
+      console.log( newVideo );
+     if (newVideo === null) {
+        newVideo = new Video(this.newVideoUrl);
      }
     this.videos.push( newVideo );
     if ( newVideo.valid == true) {
