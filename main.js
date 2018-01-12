@@ -59,7 +59,7 @@ var YD = new YoutubeMp3Downloader({
 });
 function download(video_id, title) {
   //Download video and save as MP3 file
-  YD.download(video_id, title);
+  YD.download(video_id, title + '.mp3');
    
   YD.on("finished", function(err, data) {
       console.log(JSON.stringify(data));
