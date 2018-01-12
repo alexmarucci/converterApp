@@ -36,13 +36,14 @@
     <div matLine style="max-width: 50%;min-width: 200px;">
       <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
     </div>
-    <div style="display: flex">
-      <mat-icon style='color: #737373;' *ngIf='!vid.done' (click)="startDownload( vid )">file_download</mat-icon>
-      <mat-icon style='color: #737373;' *ngIf='vid.done'>folder</mat-icon>
-      <mat-icon color='warn' (click)='remove(vid)'>delete</mat-icon>
+    <div style="display: flex;margin-right: 30px">
+      <mat-icon class='clickable' style='color: #737373;' *ngIf='!vid.done' (click)="startDownload( vid )">file_download</mat-icon>
+      <mat-icon class='clickable' style='color: #737373;' *ngIf='vid.done'>folder</mat-icon>
+      <mat-icon class='closeBtn clickable' color='warn' (click)='remove(vid)'>close</mat-icon>
     </div>
   </mat-list-item>
 </mat-list>
+
 <mat-list *ngIf='!options.dense'>
   <mat-list-item *ngFor="let vid of videos">
     <span class='video_new_selector' *ngIf='!vid.done'></span>
@@ -54,10 +55,10 @@
     <div matLine style="max-width: 50%;min-width: 200px;">
       <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
     </div>
-    <div style="display: flex">
+    <div style="display: flex;margin-right: 30px">
       <mat-icon class='clickable' style='color: #737373;' *ngIf='!vid.done' (click)="startDownload( vid )">file_download</mat-icon>
       <mat-icon class='clickable' style='color: #737373;' *ngIf='vid.done'>folder</mat-icon>
-      <mat-icon class='clickable' color='warn' (click)='remove(vid)'>delete</mat-icon>
+      <mat-icon class='closeBtn clickable' color='warn' (click)='remove(vid)'>close</mat-icon>
     </div>
   </mat-list-item>
 </mat-list>

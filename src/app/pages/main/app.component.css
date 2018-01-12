@@ -1,3 +1,6 @@
+mat-list {
+    padding: 0;
+}
 mat-list-item {
     border-bottom: 1px solid #e6e6e6;
 }
@@ -29,4 +32,11 @@ mat-chip-list {
 }
 .clickable:hover{
     filter: brightness(1.2);
+}
+.closeBtn {
+    position: absolute;
+    top: 7px;
+    right: 0;
+    font-size: 15px;
+    color: #a2a2a2;
 }
