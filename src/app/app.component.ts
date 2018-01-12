@@ -34,14 +34,16 @@ export class AppComponent implements OnInit {
        console.log( this.electronService );
       this.electronService.ipcRenderer.on('asynchronous-reply', (event, arg) => {
         this.zone.run( () =>{ 
-          this.addVideo( new Video(arg) );
+        let video = new Video( arg );
+          this.addVideo( video );
         })
       })
      }
   }
 
   addVideo(newVideo: Video = null){
-      if (this.newVideoUrl.trim().length == 0 || newVideo === null) {
+        console.log('asynchronous-reply' + newVideo);
+      if (this.newVideoUrl.trim().length == 0 && newVideo === null) {
           return true;
       }
       console.log( newVideo );
