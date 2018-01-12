@@ -4,11 +4,12 @@ import {ElectronService} from 'ngx-electron';
 
 import { VideoService } from './video.service';
 import { DownloadService } from './download.service';
+import { DatabaseService } from './database.service';
 import { Video } from './models/video';
 
 @Component({
   selector: 'app-root',
-  providers: [VideoService, DownloadService],
+  providers: [VideoService, DownloadService, DatabaseService],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -16,60 +17,71 @@ import { Video } from './models/video';
 export class AppComponent implements OnInit {
   title = 'app';
   videos: Video[];
-  newVideoUrl: String;
 
-  constructor(private http: HttpClient, private videoService: VideoService, private downloadService: DownloadService, private electronService: ElectronService, private zone: NgZone) {
-      let dummyVideo = new Video('url://');
-      dummyVideo.id = 'PRXtbLqIx04';
-      dummyVideo.title = 'PEACH PIT - peach pit';
-      dummyVideo.thumbnail = {url: 'https://i.ytimg.com/vi/PRXtbLqIx04/mqdefault.jpg', width: 30, height: 40};
-      dummyVideo.duration = '330';
-    this.videos = [dummyVideo];
-    this.videos.push( dummyVideo );
-    this.newVideoUrl = 'https://www.youtube.com/watch?v=PRXtbLqIx04';
+  constructor(private http: HttpClient, private videoService: VideoService, private downloadService: DownloadService, private database: DatabaseService, private electronService: ElectronService, private zone: NgZone) {
+      this.videos = [];
   }
  
   ngOnInit(): void {
+      this.loadCollection();
      if(this.electronService.isElectronApp) {
        console.log( this.electronService );
-      this.electronService.ipcRenderer.on('asynchronous-reply', (event, arg) => {
-        this.zone.run( () =>{ 
-        let video = new Video( arg );
-          this.addVideo( video );
+      this.electronService.ipcRenderer.on('clipboard-paste', (event, arg) => {
+        this.zone.run( () => { 
+          if (arg.length < 80) {
+            this.addVideo( arg );
+          }
         })
       })
      }
   }
-
-  addVideo(newVideo: Video = null){
-        console.log('asynchronous-reply' + newVideo);
-      if (this.newVideoUrl.trim().length == 0 && newVideo === null) {
+  loadCollection(){
+    this.database.findAll().then(
+          (videos: Video[]) => {
+              this.videos = videos;
+          },
+          (err) => {
+              console.log(err);
+          }
+      )
+  }
+  addVideo(videoUrl: String){
+      videoUrl = videoUrl.trim();
+      if (videoUrl.length == 0 || videoUrl.length > 80) {
           return true;
       }
-      console.log( newVideo );
-     if (newVideo === null) {
-        newVideo = new Video(this.newVideoUrl);
-     }
+    let newVideo = new Video(videoUrl);
     this.videos.push( newVideo );
-    if ( newVideo.valid == true) {
+     this.database.insert(newVideo).then(
+          (newItem) => {
+              //return this.loadCollection();
+          },
+          (err) => {
+              console.log(err);
+          }
+      )
+    if ( newVideo.valid === true) {
+      console.log( this.videos );
       this.videoService.getVideo( newVideo ).subscribe(video => newVideo = video )
     }
-
-    this.newVideoUrl = '';
   }
-
-  startConversion(video: Video){
-    if (video.id) {
-      this.downloadService.getLink( video.id );
+  onPasteAction(): void {
+    if(this.electronService.isElectronApp) {
+      let textToPaste = this.electronService.clipboard.readText();
+      this.addVideo( textToPaste );
     }
   }
-  onPaste(e: any ): void {
-      alert( e.clipboardData.getData('text/plain') );
+  startDownload(video: Video){
+    if (video.valid === true && video.id.length > 0) {
+      //this.downloadService.getLink( video.id );
+      this.electronService.ipcRenderer.send('request-download', video.id)
+    }
   }
   remove(video: Video): void {
     const index: number = this.videos.indexOf(video);
     if (index !== -1) {
         this.videos.splice(index, 1);
+        this.database.remove( video.id );
     }
   }
 }
