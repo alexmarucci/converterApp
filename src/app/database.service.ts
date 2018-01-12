@@ -2,15 +2,22 @@ import { Injectable } from '@angular/core';
 
 import * as Datastore from 'nedb'
 import * as Promise from 'bluebird';
+import * as path from 'path'
+import {ElectronService} from 'ngx-electron';
 
 @Injectable()
 export class DatabaseService {
     db: Datastore;
 
-  constructor() {
+  constructor(private electronService: ElectronService) {
+      let path: String = './DB_Y.db';
+      if (this.electronService.isElectronApp) {
+          path = this.electronService.remote.app.getPath('userData') + '/DB_Y.db';
+      }
       this.db = new Datastore({
-          filename: 'DB_Y.db',
-          autoload: true });
+          autoload: true,
+          filename: path
+          });
   }
 
   insert(item){
@@ -53,5 +60,18 @@ export class DatabaseService {
             }));
         })
     }
-
+    update(video) {
+        return new Promise((resolve, reject) => {
+            return this.db.update({ id: video.id }, video,{upsert: true}, ((err, numReplaced) => {
+                if ( err )
+                {
+                    reject(err);
+                }
+                else
+                {
+                    resolve(numReplaced);
+                }
+            }));
+        })
+    }
 }

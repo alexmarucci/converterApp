@@ -2,10 +2,10 @@ import { OnInit, Component, NgZone } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ElectronService} from 'ngx-electron';
 
-import { VideoService } from './video.service';
-import { DownloadService } from './download.service';
-import { DatabaseService } from './database.service';
-import { Video } from './models/video';
+import { VideoService } from '../../video.service';
+import { DownloadService } from '../../download.service';
+import { DatabaseService } from '../../database.service';
+import { Video } from '../../models/video';
 
 @Component({
   selector: 'app-root',
@@ -17,15 +17,17 @@ import { Video } from './models/video';
 export class AppComponent implements OnInit {
   title = 'app';
   videos: Video[];
-
+  options: any;
   constructor(private http: HttpClient, private videoService: VideoService, private downloadService: DownloadService, private database: DatabaseService, private electronService: ElectronService, private zone: NgZone) {
       this.videos = [];
+      this.options = {
+        'dense': false
+      };
   }
  
   ngOnInit(): void {
       this.loadCollection();
      if(this.electronService.isElectronApp) {
-       console.log( this.electronService );
       this.electronService.ipcRenderer.on('clipboard-paste', (event, arg) => {
         this.zone.run( () => { 
           if (arg.length < 80) {
@@ -34,6 +36,9 @@ export class AppComponent implements OnInit {
         })
       })
      }
+  }
+  switchToDense(dense: Boolean){
+    this.options.dense = dense;
   }
   loadCollection(){
     this.database.findAll().then(
@@ -52,7 +57,7 @@ export class AppComponent implements OnInit {
       }
     let newVideo = new Video(videoUrl);
     this.videos.push( newVideo );
-     this.database.insert(newVideo).then(
+    this.database.insert(newVideo).then(
           (newItem) => {
               //return this.loadCollection();
           },
@@ -61,8 +66,11 @@ export class AppComponent implements OnInit {
           }
       )
     if ( newVideo.valid === true) {
-      console.log( this.videos );
-      this.videoService.getVideo( newVideo ).subscribe(video => newVideo = video )
+      this.videoService.getVideo( newVideo ).subscribe(video => {
+          newVideo = video;
+
+          this.database.update( video );
+        })
     }
   }
   onPasteAction(): void {

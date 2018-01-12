@@ -11,7 +11,7 @@ import {MatIconModule} from '@angular/material/icon';
 
 import {NgxElectronModule} from 'ngx-electron';
 
-import { AppComponent } from './app.component';
+import { AppComponent } from './pages/main/app.component';
 import { VideoService } from './video.service';
 import { TimeFormatPipe } from './time-format.pipe';
 
