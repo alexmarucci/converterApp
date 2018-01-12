@@ -19,9 +19,8 @@ function createWindow () {
   
   win.webContents.openDevTools();
 
- ipcMain.on('request-download', (event, arg) => {
-    console.log( arg );
-    download( arg );
+ ipcMain.on('request-download', (event, video) => {
+    download( video.id, video.title );
   })
 }
 // Create window on electron intialization
@@ -58,35 +57,23 @@ var YD = new YoutubeMp3Downloader({
     "queueParallelism": 2,                  // How many parallel downloads/encodes should be started?
     "progressTimeout": 2000                 // How long should be the interval of the progress reports
 });
-function download(video_id) {
+function download(video_id, title) {
   //Download video and save as MP3 file
-  //YD.download(video_id);
-   /*
+  YD.download(video_id, title);
+   
   YD.on("finished", function(err, data) {
       console.log(JSON.stringify(data));
+      win.webContents.send('download-finished', data);
   });
    
   YD.on("error", function(error) {
       console.log(error);
+      win.webContents.send('download-error', error);
   });
    
   YD.on("progress", function(progress) {
       console.log(JSON.stringify(progress));
+      win.webContents.send('download-progress', progress);
   });
-  */
 }
  
-//Download video and save as MP3 file
-YD.download('i2MQK9Qnl_Q','test.mp3');
- 
-YD.on("finished", function(err, data) {
-    console.log(JSON.stringify(data));
-});
- 
-YD.on("error", function(error) {
-    console.log(error);
-});
- 
-YD.on("progress", function(progress) {
-    console.log(JSON.stringify(progress));
-});

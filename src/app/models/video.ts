@@ -7,12 +7,14 @@ export class Video {
 	thumbnail: any;
 	valid: Boolean;
 	done: false;
+	progress: any;
 
 	constructor(url: String) {
 		this.valid = false;
 		this.url = url;
 		this.title = url;
 		this.id = this.parseIdFromUrl( url );
+		this.progress = {percentage: '0', speed: '0'};
 	}
 
 	private parseIdFromUrl( url ){

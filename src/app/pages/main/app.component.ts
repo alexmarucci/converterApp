@@ -81,8 +81,12 @@ export class AppComponent implements OnInit {
   }
   startDownload(video: Video){
     if (video.valid === true && video.id.length > 0) {
-      //this.downloadService.getLink( video.id );
-      this.electronService.ipcRenderer.send('request-download', video.id)
+      let mp3 = this.downloadService.getMP3( video );
+
+      this.downloadService.onProgress(function(progress) {
+          console.log(JSON.stringify(progress.progress.percentage));
+      });
+
     }
   }
   remove(video: Video): void {

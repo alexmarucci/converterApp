@@ -53,7 +53,8 @@
       <strong class="selectable">{{ vid.title }}</strong>&nbsp;<small *ngIf='vid.duration' style='color: #607d8b;'>{{ vid.duration | timeFormat }}</small> 
     </p>
     <div matLine style="max-width: 50%;min-width: 200px;">
-      <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+      <mat-progress-bar mode="determinate" value="{{ vid.progress.percentage }}"></mat-progress-bar>
+      <span>{{ vid.progress.speed }}</span>
     </div>
     <div style="display: flex;margin-right: 30px">
       <mat-icon class='clickable' style='color: #737373;' *ngIf='!vid.done' (click)="startDownload( vid )">file_download</mat-icon>
