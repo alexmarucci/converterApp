@@ -28,6 +28,7 @@
     "@angular/router": "^5.0.0",
     "bluebird": "^3.5.1",
     "core-js": "^2.4.1",
+    "electron-editor-context-menu": "^1.1.1",
     "ffmpeg": "0.0.4",
     "ffmpeg-binaries": "^3.2.2-3",
     "nedb": "^1.8.0",
