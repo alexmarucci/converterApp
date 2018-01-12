@@ -55,7 +55,7 @@ var YD = new YoutubeMp3Downloader({
     "outputPath": "./storage",    // Where should the downloaded and encoded files be stored?
     "youtubeVideoQuality": "highest",       // What video quality should be used?
     "queueParallelism": 2,                  // How many parallel downloads/encodes should be started?
-    "progressTimeout": 2000                 // How long should be the interval of the progress reports
+    "progressTimeout": 200                 // How long should be the interval of the progress reports
 });
 function download(video_id, title) {
   //Download video and save as MP3 file
