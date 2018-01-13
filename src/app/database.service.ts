@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import * as Datastore from 'nedb'
 import * as Promise from 'bluebird';
-import * as path from 'path'
+import * as path from 'path';
 import {ElectronService} from 'ngx-electron';
 
 @Injectable()
