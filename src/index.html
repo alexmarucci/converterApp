@@ -10,5 +10,21 @@
 </head>
 <body>
   <app-root></app-root>
+  <script>
+    if (typeof(require) !== 'undefined') {
+
+        const remote = require('electron').remote
+        var buildEditorContextMenu = remote.require('electron-editor-context-menu');
+
+        let rightClickPosition = null
+
+        const menu = buildEditorContextMenu();
+
+        window.addEventListener('contextmenu', (e) => {
+          e.preventDefault()
+          menu.popup(remote.getCurrentWindow())
+        }, false)
+    }
+  </script>
 </body>
 </html>
