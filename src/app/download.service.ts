@@ -13,6 +13,9 @@ export class DownloadService {
   getMP3(video: Video ){
     this.electronService.ipcRenderer.send('request-download', video);
   }
+  removeDownload(video: Video){
+    this.electronService.ipcRenderer.send('remove-download', video);
+  }
 
   onProgress(closure){
     this.electronService.ipcRenderer.on('download-progress', (event, arg) => {
@@ -25,9 +28,9 @@ export class DownloadService {
       closure( arg )
     })
   }
-  onFinished(closure){
+  onCompleted(closure){
     this.electronService.ipcRenderer.on('download-finished', (event, arg) => {
-      closure( arg )
+      closure( arg.err, arg.data )
     })
   }
  
