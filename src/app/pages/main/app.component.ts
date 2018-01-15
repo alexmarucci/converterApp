@@ -5,6 +5,7 @@ import {ElectronService} from 'ngx-electron';
 import { VideoService } from '../../video.service';
 import { DownloadService } from '../../download.service';
 import { DatabaseService } from '../../database.service';
+
 import { Video } from '../../models/video';
 
 @Component({

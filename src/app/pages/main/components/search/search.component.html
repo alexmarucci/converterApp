@@ -1,0 +1,13 @@
+<input  class='btn btn-default' 
+        style="width: 75%;min-width: 350px;background: white"
+        placeholder="Search Music"
+        value="" 
+        [matAutocomplete]="auto"
+        [formControl]="stateCtrl" 
+    >
+
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let keyword of results" [value]="keyword">
+        <span>{{ keyword }}</span>
+      </mat-option>
+    </mat-autocomplete>
