@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
      if(this.electronService.isElectronApp) {
       this.electronService.ipcRenderer.on('clipboard-paste', (event, arg) => {
         this.zone.run( () => { 
-          if (arg.length < 80) {
+          if (arg.length < 200) {
             this.addVideo( arg );
           }
         })
@@ -50,12 +50,24 @@ export class AppComponent implements OnInit {
           }
       )
   }
+  private isDuplicate( video: Video ){
+    for (var i = this.videos.length - 1; i >= 0; i--) {
+      if (this.videos[i].id === video.id ) {
+        return true;
+      }
+    }
+    return false;
+  }
   addVideo(videoUrl: String){
       videoUrl = videoUrl.trim();
-      if (videoUrl.length == 0 || videoUrl.length > 80) {
+
+      if (videoUrl.length == 0 || videoUrl.length > 200) {
           return true;
       }
     let newVideo = new Video(videoUrl);
+    if (this.isDuplicate( newVideo )) {
+      return true;
+    }
     this.videos.push( newVideo );
     this.database.insert(newVideo).then(
           (newItem) => {
@@ -68,7 +80,6 @@ export class AppComponent implements OnInit {
     if ( newVideo.valid === true) {
       this.videoService.getVideo( newVideo ).subscribe(video => {
           newVideo = video;
-
           this.database.update( video );
         })
     }
@@ -80,24 +91,46 @@ export class AppComponent implements OnInit {
     }
   }
   startDownload(video: Video){
-    if (video.valid === true && video.id.length > 0) {
+    if (video.valid === true && video.id.length > 0 && video.status == 'Ready') {
+      video.status = 'Queue';
       let mp3 = this.downloadService.getMP3( video );
 
       this.downloadService.onProgress((progress) => {
            this.zone.run( () => { 
              if (video.id == progress.videoId) {
+               if (video.status == 'Queue') {
+                 video.status = 'Downloading..';
+               }
                 video.progress = progress.progress;
              }
           })
       });
 
+      this.downloadService.onCompleted((err, data) => {
+        this.zone.run( () => {
+          if (err) {
+            console.log( err );
+          } else if(data.videoId == video.id){
+            video.status = 'Completed';
+            this.database.update( video );
+          }
+        })
+      });
     }
   }
   remove(video: Video): void {
     const index: number = this.videos.indexOf(video);
     if (index !== -1) {
-        this.videos.splice(index, 1);
-        this.database.remove( video.id );
+      this.downloadService.removeDownload( video );
+      this.videos.splice(index, 1);
+      this.database.remove( video.id );
+    }
+  }
+  downloadAll(){
+    for (var i = this.videos.length - 1; i >= 0; i--) {
+      if (this.videos[i].status == 'Ready') {
+        this.startDownload( this.videos[i] );
+      }
     }
   }
 }

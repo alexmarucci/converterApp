@@ -28,10 +28,10 @@ mat-chip-list {
     cursor: auto !important;
 }
 .clickable {
-    cursor: pointer !important;
+    cursor: pointer;
 }
 .clickable:hover{
-    filter: brightness(1.2);
+    opacity: 0.7;
 }
 .closeBtn {
     position: absolute;
@@ -39,4 +39,8 @@ mat-chip-list {
     right: 0;
     font-size: 15px;
     color: #a2a2a2;
+}
+.disabled {
+    opacity: 0.3 !important;
+    cursor: default !important;
 }

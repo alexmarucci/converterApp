@@ -19,13 +19,13 @@
       <span class="icon icon-list-add"></span>
       &nbsp;Paste
     </button>
-     <button class="btn btn-primary pull-right">
+     <button class="btn btn-primary pull-right" (click)='downloadAll()'>
       Download
     </button>
   </div>
 </header>
 
-<mat-list dense *ngIf='options.dense'>
+<mat-list >
   <mat-list-item *ngFor="let vid of videos">
     <span class='video_new_selector' *ngIf='!vid.done'></span>
     <img matListAvatar src="{{vid.thumbnail.url}}" *ngIf='vid.thumbnail' />
@@ -34,31 +34,13 @@
       <strong class="selectable">{{ vid.title }}</strong>&nbsp;<small *ngIf='vid.duration' style='color: #607d8b;'>{{ vid.duration | timeFormat }}</small> 
     </p>
     <div matLine style="max-width: 50%;min-width: 200px;">
-      <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+      <mat-progress-bar *ngIf='vid.status != "Ready"' mode="determinate" value="{{ vid.progress.percentage }}"></mat-progress-bar>
+      <span *ngIf='vid.status == "Downloading.."'>{{ vid.progress.percentage | number:'1.0-0' }}%</span>
     </div>
     <div style="display: flex;margin-right: 30px">
-      <mat-icon class='clickable' style='color: #737373;' *ngIf='!vid.done' (click)="startDownload( vid )">file_download</mat-icon>
-      <mat-icon class='clickable' style='color: #737373;' *ngIf='vid.done'>folder</mat-icon>
-      <mat-icon class='closeBtn clickable' color='warn' (click)='remove(vid)'>close</mat-icon>
-    </div>
-  </mat-list-item>
-</mat-list>
-
-<mat-list *ngIf='!options.dense'>
-  <mat-list-item *ngFor="let vid of videos">
-    <span class='video_new_selector' *ngIf='!vid.done'></span>
-    <img matListAvatar src="{{vid.thumbnail.url}}" *ngIf='vid.thumbnail' />
-    <img matListAvatar *ngIf='!vid.thumbnail' />
-    <p matLine>
-      <strong class="selectable">{{ vid.title }}</strong>&nbsp;<small *ngIf='vid.duration' style='color: #607d8b;'>{{ vid.duration | timeFormat }}</small> 
-    </p>
-    <div matLine style="max-width: 50%;min-width: 200px;">
-      <mat-progress-bar mode="determinate" value="{{ vid.progress.percentage }}"></mat-progress-bar>
-      <span>{{ vid.progress.percentage }}%</span>
-    </div>
-    <div style="display: flex;margin-right: 30px">
-      <mat-icon class='clickable' style='color: #737373;' *ngIf='!vid.done' (click)="startDownload( vid )">file_download</mat-icon>
-      <mat-icon class='clickable' style='color: #737373;' *ngIf='vid.done'>folder</mat-icon>
+      <span><small style='color: #607d8b;'>{{ vid.status }}</small></span>
+      <mat-icon class='clickable' style='color: #737373;' [class.disabled]='vid.status !== "Ready"' *ngIf='vid.status != "Completed"' (click)="startDownload( vid )">file_download</mat-icon>
+      <mat-icon class='clickable' style='color: #737373;' *ngIf='vid.status == "Completed"'>folder</mat-icon>
       <mat-icon class='closeBtn clickable' color='warn' (click)='remove(vid)'>close</mat-icon>
     </div>
   </mat-list-item>

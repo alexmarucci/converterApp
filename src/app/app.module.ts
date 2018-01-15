@@ -15,7 +15,6 @@ import { AppComponent } from './pages/main/app.component';
 import { VideoService } from './video.service';
 import { TimeFormatPipe } from './time-format.pipe';
 
-
 @NgModule({
   declarations: [
     AppComponent,
