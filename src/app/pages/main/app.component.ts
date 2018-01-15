@@ -83,8 +83,12 @@ export class AppComponent implements OnInit {
     if (video.valid === true && video.id.length > 0) {
       let mp3 = this.downloadService.getMP3( video );
 
-      this.downloadService.onProgress(function(progress) {
-          console.log(JSON.stringify(progress.progress.percentage));
+      this.downloadService.onProgress((progress) => {
+           this.zone.run( () => { 
+             if (video.id == progress.videoId) {
+                video.progress = progress.progress;
+             }
+          })
       });
 
     }

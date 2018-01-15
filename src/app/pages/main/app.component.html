@@ -54,7 +54,7 @@
     </p>
     <div matLine style="max-width: 50%;min-width: 200px;">
       <mat-progress-bar mode="determinate" value="{{ vid.progress.percentage }}"></mat-progress-bar>
-      <span>{{ vid.progress.speed }}</span>
+      <span>{{ vid.progress.percentage }}%</span>
     </div>
     <div style="display: flex;margin-right: 30px">
       <mat-icon class='clickable' style='color: #737373;' *ngIf='!vid.done' (click)="startDownload( vid )">file_download</mat-icon>
