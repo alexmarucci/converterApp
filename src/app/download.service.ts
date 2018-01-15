@@ -1,28 +1,37 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import 'rxjs/add/operator/map'
+import {ElectronService} from 'ngx-electron';
+import {YoutubeMp3Downloader} from 'youtube-mp3-downloader';
+import {Video} from './models/video';
 
 @Injectable()
 export class DownloadService {
 
   serviceProvider = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private electronService: ElectronService) { }
 
-  getLink(video_id: String){
-      console.log(this.serviceProvider + video_id);
-      
-      this.http.get(this.serviceProvider + video_id).subscribe(
-            // Successful responses call the first callback.
-            data => {
-                console.log( data );
-            },
-            // Errors will call this callback instead:
-            err => {
-              console.log('Something went wrong!');
-            }
-          );
+  getMP3(video: Video ){
+    this.electronService.ipcRenderer.send('request-download', video);
+  }
+  removeDownload(video: Video){
+    this.electronService.ipcRenderer.send('remove-download', video);
   }
 
+  onProgress(closure){
+    this.electronService.ipcRenderer.on('download-progress', (event, arg) => {
+      closure( arg )
+      })
+  }
+
+  onError(closure){
+    this.electronService.ipcRenderer.on('download-error', (event, arg) => {
+      closure( arg )
+    })
+  }
+  onCompleted(closure){
+    this.electronService.ipcRenderer.on('download-finished', (event, arg) => {
+      closure( arg.err, arg.data )
+    })
+  }
  
 }

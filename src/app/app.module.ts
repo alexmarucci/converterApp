@@ -9,10 +9,11 @@ import { FormsModule } from '@angular/forms';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatIconModule} from '@angular/material/icon';
 
-import { AppComponent } from './app.component';
+import {NgxElectronModule} from 'ngx-electron';
+
+import { AppComponent } from './pages/main/app.component';
 import { VideoService } from './video.service';
 import { TimeFormatPipe } from './time-format.pipe';
-
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { TimeFormatPipe } from './time-format.pipe';
     MatButtonModule,
     MatChipsModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
+    NgxElectronModule
   ],
   providers: [VideoService],
   bootstrap: [AppComponent]

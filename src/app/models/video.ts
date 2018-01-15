@@ -4,23 +4,36 @@ export class Video {
 	url: String;
 	title: String;
 	duration: String;
-	thumbnail: String;
+	thumbnail: any;
 	valid: Boolean;
 	done: false;
+	progress: any;
+	status: any;
 
 	constructor(url: String) {
 		this.valid = false;
 		this.url = url;
 		this.title = url;
 		this.id = this.parseIdFromUrl( url );
+		this.progress = {percentage: '0.1', speed: '0'};
+		this.status = 'Ready';
 	}
 
 	private parseIdFromUrl( url ){
 		if (url) {
-			var test = url.match(/watch\?v=(.*)/);
+			// https://youtu.be/hNRHHRjep3E?t=2
+			if (url.match(/youtu/) === null) {
+				return null;
+			}
+			var test = url.match(/v=([^&]*)/);
+			var test2 = url.match(/youtu\.be\/([^?]*)/);
+			console.log( test2 );
 			if (test && test.hasOwnProperty(1)) {
 				this.valid = true;
 				return test[1];
+			} else if( test2 && test2.hasOwnProperty(1) ) {
+				this.valid = true;
+				return test2[1];
 			}
 		}
 
